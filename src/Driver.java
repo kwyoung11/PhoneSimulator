@@ -2,11 +2,24 @@
 public class Driver {
 
 		public static void main(String[] args) {
+			// create a network
 			Network network = new Network();
-			Phone outside_phone = network.add_phone("3015182536", "Kevin Young");
-			Phone client_phone = network.add_phone_with_interface("3016578590", "Home");
+			// instantiate outside phone
+			Phone outside_phone = network.add_phone("3015181111", "Outside Phone"); // add outside phone to network
+			outside_phone.start(); // start thread of outside phone
 			
-			outside_phone.call(client_phone, "Calling Home...");
+			// instantiate client phone
+			PhoneInterface client_phone_interface = new PhoneInterface("3016571111", "Client");
+			client_phone_interface.phone.phone_interface = client_phone_interface;
+			client_phone_interface.phone.start(); // start thread of client phone
+			Network.phones.add(client_phone_interface.phone); // add client phone to network
+			
+			// call client phone from outside phone
+			outside_phone.call(client_phone_interface.phone, "This is my message...");
+//			client_phone_interface.phone.answer();
+			
+//			outside_phone.stop();
+//			client_phone_interface.phone.stop();
 		}
 	
 }
