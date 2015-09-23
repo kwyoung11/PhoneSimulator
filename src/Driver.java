@@ -16,7 +16,7 @@ public class Driver {
 			Network.phones.add(client_phone_interface.phone); // add client phone to network
 			
 			// call client phone from outside phone
-			outside_phone.call(client_phone_interface.phone, "This is my message...");			
+			outside_phone.call(client_phone_interface.phone, "This is my message...");
 		}
 	
 }

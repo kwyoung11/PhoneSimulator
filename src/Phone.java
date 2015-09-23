@@ -19,34 +19,94 @@ public class Phone extends Thread {
 	String incoming_message;
 	PhoneInterface phone_interface;
 	
+	// "dumb" outside phone
 	public Phone(String mobile_id, String caller_id) {
 		this.mobile_id = mobile_id;
 		this.caller_id = caller_id;
-//		listen();
 	}
 	
+	// client phone with interface
 	public Phone(String mobile_id, String caller_id, boolean hasInterface) {
 		this.mobile_id = mobile_id;
 		this.caller_id = caller_id;
 		this.hasInterface = hasInterface;
-		
-//		listen();
 	}
 	
+	// tasks to be performed by phone in separate thread (e.g. ringing, call active, etc.)
 	public void run() {
+		// create the GUI for the outside phone
+					if (!hasInterface) {
+						// generate the GUI
+						Frame  frame = new Frame(caller_id);
+					    Label  label = new Label("Phone");
+					    Label label2 = new Label(current_caller_id);
+//					    Label label3 = new Label(timer);
+					    Button answer_button = new Button("Answer");
+					    Button end_button = new Button("End");
+					    
+					    // add event listeners
+					    answer_button.addActionListener( new ActionListener() {
+						  public void actionPerformed(ActionEvent evt) {
+						        answer();
+						  }
+						});
+					    
+					    end_button.addActionListener( new ActionListener() {
+					      public void actionPerformed(ActionEvent evt) {
+					        end_call();
+					      }
+					    });
+					    
+					    // close phone gui on "x" press
+					    frame.addWindowListener(new WindowAdapter() {
+					    	  public void windowClosing(WindowEvent we) {
+					    	    System.exit(0);
+					    	  }
+					    	});
+					    
+					    // Set layout manager
+					    frame.setLayout(new FlowLayout());
+				
+					    // Add to frame
+					    frame.add(label);
+					    frame.add(label2);
+					    frame.add(answer_button);
+					    frame.add(end_button);
+					    frame.pack();
+				
+					    // Center the frame
+					    Toolkit toolkit = Toolkit.getDefaultToolkit();
+				
+					    // Get the current screen size
+					    Dimension scrnsize = toolkit.getScreenSize();
+				
+					    // Get the frame size
+					    Dimension framesize = frame.getSize();
+				
+					    // Set X,Y location
+					    frame.setLocation ((int) (scrnsize.getWidth() - frame.getWidth() ) / 2 , (int) (scrnsize.getHeight() - frame.getHeight()) / 2);
+					    frame.setVisible(true);
+					}
+		
+		
 		while (true) {
 			int i = 0;
 			if (incoming_call) {
-				Frame  frame = new Frame("Client Phone");
+				
+				// generate the GUI
+				Frame  frame = new Frame(caller_id);
 			    Label  label = new Label("Phone");
+			    Label label2 = new Label(current_caller_id);
+//			    Label label3 = new Label(timer);
 			    Button answer_button = new Button("Answer");
 			    Button end_button = new Button("End");
 			    
+			    // add event listeners
 			    answer_button.addActionListener( new ActionListener() {
-				      public void actionPerformed(ActionEvent evt) {
+				  public void actionPerformed(ActionEvent evt) {
 				        answer();
-				      }
-				    });
+				  }
+				});
 			    
 			    end_button.addActionListener( new ActionListener() {
 			      public void actionPerformed(ActionEvent evt) {
@@ -54,11 +114,19 @@ public class Phone extends Thread {
 			      }
 			    });
 			    
+			    // close phone gui on "x" press
+			    frame.addWindowListener(new WindowAdapter() {
+			    	  public void windowClosing(WindowEvent we) {
+			    	    System.exit(0);
+			    	  }
+			    	});
+			    
 			    // Set layout manager
 			    frame.setLayout(new FlowLayout());
 		
 			    // Add to frame
 			    frame.add(label);
+			    frame.add(label2);
 			    frame.add(answer_button);
 			    frame.add(end_button);
 			    frame.pack();
@@ -75,6 +143,7 @@ public class Phone extends Thread {
 			    // Set X,Y location
 			    frame.setLocation ((int) (scrnsize.getWidth() - frame.getWidth() ) / 2 , (int) (scrnsize.getHeight() - frame.getHeight()) / 2);
 			    frame.setVisible(true);
+			    
 			    while (incoming_call) {
 			    	try {
 						Thread.sleep(1000);
@@ -82,9 +151,12 @@ public class Phone extends Thread {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					System.out.println(caller_id + "'s phone is ringing ... Ring #" + (i+1));
+			    	if (incoming_call) {
+			    		System.out.println(caller_id + "'s phone is ringing ... Ring #" + (i+1));
+			    	}
 					i++;
 				}
+			   
 			    
 			}
 			int j = 0;
@@ -95,9 +167,13 @@ public class Phone extends Thread {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				System.out.println(caller_id + " in call with " + current_caller_id + " for " + j + " second(s)");
+				if (ongoing_call) {
+					System.out.println(caller_id + " in call with " + current_caller_id + " for " + j + " second(s)");
+				}
 				j++;
 			}
+			
+			
 			
 		}
 		
@@ -113,14 +189,6 @@ public class Phone extends Thread {
 		phone.incoming_message = message;
 	}
 	
-//	public void listen() {
-//		while (true) {
-//			if (incoming_call) {
-//				
-//			}
-//		}
-//	}
-	
 	public void answer() {
 		if (incoming_call) {
 			incoming_call = false;
@@ -134,6 +202,7 @@ public class Phone extends Thread {
 	}
 	
 	public void end_call() {
+		incoming_call = false;
 		ongoing_call = false;
 		System.out.println("Call ended");
 	}
