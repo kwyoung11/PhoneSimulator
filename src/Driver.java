@@ -4,6 +4,7 @@ public class Driver {
 		public static void main(String[] args) {
 			// create a network
 			Network network = new Network();
+			
 			// instantiate outside phone
 			Phone outside_phone = network.add_phone("3015181111", "Outside Phone"); // add outside phone to network
 			outside_phone.start(); // start thread of outside phone
@@ -15,11 +16,7 @@ public class Driver {
 			Network.phones.add(client_phone_interface.phone); // add client phone to network
 			
 			// call client phone from outside phone
-			outside_phone.call(client_phone_interface.phone, "This is my message...");
-//			client_phone_interface.phone.answer();
-			
-//			outside_phone.stop();
-//			client_phone_interface.phone.stop();
+			outside_phone.call(client_phone_interface.phone, "This is my message...");			
 		}
 	
 }
