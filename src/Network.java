@@ -9,14 +9,7 @@ public class Network {
 		
 	}
 	
-	public Phone add_phone(String mobile_id, String caller_id) {
-		Phone phone = new Phone(mobile_id, caller_id);
-		phones.add(phone);
-		return phone;
-	}
-	
-	public Phone add_phone_with_interface(String mobile_id, String caller_id) {
-		Phone phone = new Phone(mobile_id, caller_id, true);
+	public Phone add_phone(Phone phone){
 		phones.add(phone);
 		return phone;
 	}
