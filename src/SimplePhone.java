@@ -2,13 +2,12 @@ import java.awt.Button;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
-import java.awt.GraphicsConfiguration;
+import java.awt.GridLayout;
 import java.awt.Label;
+import java.awt.Panel;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 
@@ -30,8 +29,18 @@ public class SimplePhone extends Phone{
 
 	@Override
 	public void addToFrame() {
-		// TODO Auto-generated method stub
-		
+		Button callButton = new Button("call");
+		callButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ClientPhone client = Network.getInstance().getClientPhone();
+				System.out.println(client.toString());
+				SimplePhone.this.call(client, "message");
+				
+			}
+		});
+		frame.add(callButton);
 	}
 	
 	@Override
@@ -44,6 +53,17 @@ public class SimplePhone extends Phone{
 	    // Get the frame size
 	    Dimension framesize = interfaceFrame.getSize();
 	    this.frame.setLocation ((int) (scrnsize.getWidth()/2) - frame.getWidth() , (int) (scrnsize.getHeight() - interfaceFrame.getHeight()) / 2);
+	}
+
+	@Override
+	public void updateGUI() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Object createLayout() {
+		return new FlowLayout();
 	}
 	
 	
