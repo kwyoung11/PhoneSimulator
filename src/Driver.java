@@ -3,7 +3,7 @@ public class Driver {
 
 		public static void main(String[] args) {
 			// create a network
-			Network network = new Network();
+			Network network = Network.getInstance();
 			
 			// instantiate outside phone
 			Phone outside_phone = new SimplePhone("3015181111", "Outside Phone");
@@ -19,8 +19,6 @@ public class Driver {
 			// start thread of outside phone
 			new Thread(client_phone).start();
 			
-			// call client phone from outside phone
-			outside_phone.call(client_phone, "This is my message...");
 		}
 	
 }

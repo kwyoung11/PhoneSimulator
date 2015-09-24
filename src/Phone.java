@@ -1,9 +1,10 @@
 import java.awt.Button;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
+import java.awt.GridLayout;
 import java.awt.Label;
-import java.awt.Toolkit;
+import java.awt.Panel;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -36,10 +37,15 @@ public abstract class Phone implements Runnable{
 	
 	public abstract void addToFrame();
 	
+	/** 
+	 * Update any fields that need to be updated within the frame here
+	 * 
+	 */
+	public abstract void updateGUI();
+	
+	public abstract Object createLayout();
+	
 	public void createFrame() {
-		
-	    Label simpleCallingLabel = new Label("");
-	    
 		Label timerLabel = new Label("           ");
 		this.timerLabel = timerLabel;
 		Label caller_id_label = new Label("");
@@ -71,19 +77,31 @@ public abstract class Phone implements Runnable{
     	});
 	    
 	    // Set layout manager
-	    interfaceFrame.setLayout(new FlowLayout());
+	    // update rows parameter for the number of rows.
+	    Object layout = createLayout();
+	    if(this instanceof ClientPhone){
+	    	interfaceFrame.setLayout((GridLayout)layout);
+	    }
+	    else{
+	    	interfaceFrame.setLayout((FlowLayout)layout);
+	    }
+	    
 
 	    // Add to frame
-	    interfaceFrame.add(label);
-	    interfaceFrame.add(timerLabel);
-	    interfaceFrame.add(answer_button);
-	    interfaceFrame.add(end_button);
+	    Panel panel = new Panel();
+	    panel.add(label);
+	    panel.add(timerLabel);
+	    panel.add(answer_button);
+	    panel.add(end_button);
+	    interfaceFrame.add(panel);
+	    this.frame = interfaceFrame;
+	    this.addToFrame();
 	    interfaceFrame.pack();
 
 	    // Set X,Y location
 	   
 
-	    this.frame = interfaceFrame;
+	    
 	    interfaceFrame.setVisible(true);
 	    this.centerFrame();
 	    
@@ -92,9 +110,8 @@ public abstract class Phone implements Runnable{
 	    while(true){
 	    	
 			    if (connectedPhone != null) {
-					 if (ongoing_call) {
-						 simpleCallingLabel.setText(connectedPhone.caller_id);
-					 }
+					 caller_id_label.setText(connectedPhone.caller_id);
+					 int j = 0;
 					while (ongoing_call) {
 						try {
 							Thread.sleep(1000);
@@ -102,10 +119,8 @@ public abstract class Phone implements Runnable{
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						String time = getTimeInMMSS(i);
-						timerLabel.setText(time);
-						i++;
-						this.maintainTimer(i);
+						j++;
+						this.maintainTimer(j);
 				    }
 					timerLabel.setText("         ");
 				}
@@ -122,13 +137,14 @@ public abstract class Phone implements Runnable{
 			    	}
 					i++;
 				}
-	    	
+			    this.updateGUI();
 	    }
 		
 	}
 	
 	
 	public void call(Phone phone, String message) {
+		System.out.println("in call");
 	    this.outgoing_call = true;
 	    this.connectedPhone = phone;
 		this.current_caller_id = phone.caller_id;
@@ -173,7 +189,9 @@ public abstract class Phone implements Runnable{
 	        	System.out.println(caller_id + " in call with " + current_caller_id + " for " + i + " second(s)");
 	        }
 		}
-	    this.timerLabel.setText("        ");
+		else{
+			this.timerLabel.setText("        ");
+		}
 	}
 	
 	public String getTimeInMMSS(int secondsIn) {
@@ -188,7 +206,9 @@ public abstract class Phone implements Runnable{
 		if (seconds < 10) {
 			secondsString = "0" + seconds;
 		}
-		System.out.println(minutesString + ":" + secondsString);
+		if(this instanceof ClientPhone){
+			System.out.println(minutesString + ":" + secondsString);	
+		}
 		return minutesString + ":" + secondsString;
 	}
 	

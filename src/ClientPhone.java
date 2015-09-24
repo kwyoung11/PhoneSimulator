@@ -1,10 +1,5 @@
 // Import AWT classes
 import java.awt.*;
-// Import AWT event classes
-import java.awt.event.*;
-
-// Import Swing classes
-import javax.swing.*;
 
 
 public class ClientPhone extends Phone {
@@ -37,6 +32,17 @@ public class ClientPhone extends Phone {
 	    // Get the frame size
 	    Dimension framesize = interfaceFrame.getSize();
 	    this.frame.setLocation ((int) (scrnsize.getWidth()/2) , (int) (scrnsize.getHeight() - interfaceFrame.getHeight()) / 2);
+	}
+
+	@Override
+	public void updateGUI() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Object createLayout() {
+		return new GridLayout(3, 1);
 	}
 	
 	
