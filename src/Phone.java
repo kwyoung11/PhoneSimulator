@@ -44,16 +44,16 @@ public class Phone extends Thread {
 						// generate the GUI
 						Frame  frame = new Frame(caller_id);
 					    Label label = new Label(current_caller_id);
-					    Button button0 = new Button("0");
-					    Button button1 = new Button("1");
-					    Button button2 = new Button("2");
-					    Button button3 = new Button("3");
-					    Button button4 = new Button("4");
-					    Button button5 = new Button("5");
-					    Button button6 = new Button("6");
-					    Button button7 = new Button("7");
-					    Button button8 = new Button("8");
-					    Button button9 = new Button("9");
+//					    Button button0 = new Button("0");
+//					    Button button1 = new Button("1");
+//					    Button button2 = new Button("2");
+//					    Button button3 = new Button("3");
+//					    Button button4 = new Button("4");
+//					    Button button5 = new Button("5");
+//					    Button button6 = new Button("6");
+//					    Button button7 = new Button("7");
+//					    Button button8 = new Button("8");
+//					    Button button9 = new Button("9");
 					    Button answer_button = new Button("Answer");
 					    Button end_button = new Button("End");
 					    
@@ -90,16 +90,16 @@ public class Phone extends Thread {
 					    frame.add(simpleTimerLabel);
 					    frame.add(answer_button);
 					    frame.add(end_button);
-					    frame.add(button0);
-					    frame.add(button1);
-					    frame.add(button2);
-					    frame.add(button3);
-					    frame.add(button4);
-					    frame.add(button5);
-					    frame.add(button6);
-					    frame.add(button7);
-					    frame.add(button8);
-					    frame.add(button9);
+//					    frame.add(button0);
+//					    frame.add(button1);
+//					    frame.add(button2);
+//					    frame.add(button3);
+//					    frame.add(button4);
+//					    frame.add(button5);
+//					    frame.add(button6);
+//					    frame.add(button7);
+//					    frame.add(button8);
+//					    frame.add(button9);
 					    frame.pack();
 				
 					    // Center the frame
