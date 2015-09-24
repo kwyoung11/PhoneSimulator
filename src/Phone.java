@@ -54,7 +54,7 @@ public class Phone extends Thread {
 //					    Button button7 = new Button("7");
 //					    Button button8 = new Button("8");
 //					    Button button9 = new Button("9");
-					    Button answer_button = new Button("Answer");
+					    Button answer_button = new Button("Call");
 					    Button end_button = new Button("End");
 					    
 					    if (outgoing_call) {

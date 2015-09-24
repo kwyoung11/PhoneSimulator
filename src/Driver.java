@@ -18,7 +18,6 @@ public class Driver {
 			// call client phone from outside phone
 			outside_phone.call(client_phone_interface.phone, "This is my message...");
 			
-			System.out.println("This is test from Rae");
 		}
 	
 }
