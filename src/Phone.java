@@ -278,13 +278,18 @@ public class Phone extends Thread {
 	
 	public void end_call() {
 		incoming_call = false;
+		boolean call_ended = false;
+		if(ongoing_call == true){
+			call_ended = true;
+		}
 		ongoing_call = false;
 		outgoing_call = false;
 		if (callee != null) {
 			callee.incoming_call = false;
 			callee.ongoing_call = false;
 		}
-		
-		System.out.println("Call ended");
+		if(call_ended){
+			System.out.println("Call ended");
+		}
 	}
 }
