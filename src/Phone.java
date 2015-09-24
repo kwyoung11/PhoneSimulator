@@ -48,7 +48,7 @@ public abstract class Phone implements Runnable{
 	public void createFrame() {
 		Label timerLabel = new Label("           ");
 		this.timerLabel = timerLabel;
-		Label caller_id_label = new Label("");
+		Label caller_id_label = new Label("test");
 		
 		// generate the GUI
 		Frame  interfaceFrame = new Frame(caller_id);
@@ -91,6 +91,7 @@ public abstract class Phone implements Runnable{
 	    Panel panel = new Panel();
 	    panel.add(label);
 	    panel.add(timerLabel);
+	    panel.add(caller_id_label);
 	    panel.add(answer_button);
 	    panel.add(end_button);
 	    interfaceFrame.add(panel);
@@ -107,7 +108,7 @@ public abstract class Phone implements Runnable{
 	    
 	    
 	    int i = 0;
-	    while(true){
+	    while(true) {
 	    	
 			    if (connectedPhone != null) {
 					 caller_id_label.setText(connectedPhone.caller_id);
@@ -147,11 +148,12 @@ public abstract class Phone implements Runnable{
 		System.out.println("in call");
 	    this.outgoing_call = true;
 	    this.connectedPhone = phone;
+	    phone.connectedPhone = this;
 		this.current_caller_id = phone.caller_id;
 		phone.incoming_call = true;
 		phone.incoming_message = message;
 		phone.current_caller_id = this.caller_id;
-		phone.connectedPhone = this;
+		
 	}
 	
 	public void end_call() {
