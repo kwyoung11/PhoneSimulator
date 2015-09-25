@@ -47,11 +47,11 @@ public abstract class Phone implements Runnable{
 	public abstract Object createLayout();
 	
 	public void createFrame() {
-		Label timerLabel = new Label("        ");
-		Label callDurationLabel = new Label("                           ");
+		Label timerLabel = new Label("         ");
+		Label callDurationLabel = new Label("                       ");
 		this.timerLabel = timerLabel;
-		Label caller_id_label = new Label("                       ");
-		Label callerIDLabel = new Label("                            ");
+		Label caller_id_label = new Label("                          ");
+		Label callerIDLabel = new Label("                                 ");
 		
 		// generate the GUI
 		Frame  interfaceFrame = new Frame(caller_id);
@@ -104,11 +104,13 @@ public abstract class Phone implements Runnable{
 	    constraints.fill = GridBagConstraints.NONE;
 	    constraints.gridx = 0;
 	    constraints.gridy = 2;
+	    constraints.insets = new Insets(5,5,5,5);
 	    panel.add(callerIDLabel, constraints);
 	    
 	    constraints.fill = GridBagConstraints.NONE;
 	    constraints.gridx = 1;
 	    constraints.gridy = 2;
+	    constraints.anchor = GridBagConstraints.CENTER;
 	    panel.add(caller_id_label, constraints);
 	    
 	    constraints.fill = GridBagConstraints.NONE;
@@ -127,12 +129,6 @@ public abstract class Phone implements Runnable{
 	    this.frame = interfaceFrame;
 	    this.addToFrame();
 	    interfaceFrame.pack();
-
-	    
-	   
-	    // Set X,Y location
-	   
-
 	    
 	    interfaceFrame.setVisible(true);
 	    this.centerFrame();
@@ -141,9 +137,15 @@ public abstract class Phone implements Runnable{
 	   
 	    
 	    while (true) {
+	    	try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	    	Phone connectedPhone = this.getConnectedPhone();
 		    if (connectedPhone != null) {
-				 caller_id_label.setText("HELLO");
+				 caller_id_label.setText(caller_id);
 				 int j = 0;
 				 
 				 synchronized (this) {
@@ -275,8 +277,7 @@ public abstract class Phone implements Runnable{
 	        if(this instanceof ClientPhone){
 	        	System.out.println(caller_id + " in call with " + this.getConnectedPhone().caller_id + " for " + i + " second(s)");
 	        }
-		}
-		else{
+		} else {
 			this.timerLabel.setText("        ");
 		}
 	}

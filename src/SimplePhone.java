@@ -57,7 +57,6 @@ public class SimplePhone extends Phone{
 	    constraints.fill = GridBagConstraints.HORIZONTAL;
 	    constraints.gridx = 1;
 	    constraints.gridy = 1;
-	    
 	    panel.add(numberLabel,constraints);
 	    
 	    constraints.gridx = 2;
@@ -67,7 +66,6 @@ public class SimplePhone extends Phone{
 	    constraints.fill = GridBagConstraints.HORIZONTAL;
 	    constraints.gridx = 1;
 	    constraints.gridy = 2;
-	    
 	    panel.add(timeLabel,constraints);
 	    
 	    constraints.gridx = 2;
