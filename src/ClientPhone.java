@@ -20,7 +20,6 @@ public class ClientPhone extends Phone {
 
 	@Override
 	public void addToFrame() {
-		// TODO Auto-generated method stub
 		Button add_button = new Button("Add");
 	    Button remove_button = new Button("Remove");
 	    Button view_button = new Button("View List");
