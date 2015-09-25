@@ -107,7 +107,7 @@ public abstract class Phone implements Runnable{
 	    panel.add(callerIDLabel, constraints);
 	    
 	    constraints.fill = GridBagConstraints.NONE;
-	    constraints.gridx = 2;
+	    constraints.gridx = 1;
 	    constraints.gridy = 2;
 	    panel.add(caller_id_label, constraints);
 	    
