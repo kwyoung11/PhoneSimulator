@@ -35,7 +35,7 @@ public class SimplePhone extends Phone{
 
 	@Override
 	public void addToFrame() {
-		Button callButton = new Button("Call");
+		Button callButton = new Button("Call Client");
 		JTextField numberTextBox = new JTextField(8);
 		JTextField timeTextBox = new JTextField(4);
 		
@@ -47,8 +47,7 @@ public class SimplePhone extends Phone{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				ClientPhone client = Network.getInstance().getClientPhone();
-				SimplePhone.this.call(client, "My message");
-				
+				SimplePhone.this.call(client, "My message");				
 			}
 		});
 		
@@ -100,7 +99,6 @@ public class SimplePhone extends Phone{
 
 	@Override
 	public void updateGUI() {
-		// TODO Auto-generated method stub
 		
 	}
 
