@@ -35,8 +35,7 @@ public class SimplePhone extends Phone{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				ClientPhone client = Network.getInstance().getClientPhone();
-				System.out.println(client.toString());
-				SimplePhone.this.call(client, "message");
+				SimplePhone.this.call(client, "My message");
 				
 			}
 		});

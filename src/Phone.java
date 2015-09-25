@@ -18,9 +18,7 @@ public abstract class Phone implements Runnable{
 	// states
 	protected boolean incoming_call;
 	protected int arrival_of_caller_id;
-	protected boolean connection_established;
 	protected String caller_id;
-	protected String current_caller_id;
 	protected boolean outgoing_call;
 	protected Phone connectedPhone;
 	protected String incoming_message;
@@ -48,11 +46,10 @@ public abstract class Phone implements Runnable{
 	public void createFrame() {
 		Label timerLabel = new Label("           ");
 		this.timerLabel = timerLabel;
-		Label caller_id_label = new Label("test");
+		Label caller_id_label = new Label("");
 		
 		// generate the GUI
 		Frame  interfaceFrame = new Frame(caller_id);
-	    Label label = new Label(current_caller_id);
 	    Button answer_button = new Button("Answer");
 	    Button end_button = new Button("End");
 	    
@@ -89,7 +86,6 @@ public abstract class Phone implements Runnable{
 
 	    // Add to frame
 	    Panel panel = new Panel();
-	    panel.add(label);
 	    panel.add(timerLabel);
 	    panel.add(caller_id_label);
 	    panel.add(answer_button);
@@ -99,6 +95,8 @@ public abstract class Phone implements Runnable{
 	    this.addToFrame();
 	    interfaceFrame.pack();
 
+	    
+	   
 	    // Set X,Y location
 	   
 
@@ -106,54 +104,56 @@ public abstract class Phone implements Runnable{
 	    interfaceFrame.setVisible(true);
 	    this.centerFrame();
 	    
+	    System.out.println("done creating GUI");
+	   
 	    
-	    int i = 0;
 	    while(true) {
-	    	
-			    if (connectedPhone != null) {
-					 caller_id_label.setText(connectedPhone.caller_id);
-					 int j = 0;
-					while (ongoing_call) {
-						try {
-							Thread.sleep(1000);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						j++;
-						this.maintainTimer(j);
-				    }
-					timerLabel.setText("         ");
-				}
-			    
-			    while (incoming_call) {
-			    	try {
+	    	Phone connectedPhone = this.getConnectedPhone();
+		    if (connectedPhone != null) {
+				 caller_id_label.setText(this.getConnectedPhone().caller_id);
+				 int j = 0;
+				while (ongoing_call) {
+					try {
 						Thread.sleep(1000);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-			    	if (incoming_call) {
-			    		System.out.println(caller_id + "'s phone is ringing ... Ring #" + (i+1));
-			    	}
-					i++;
+					j++;
+					this.maintainTimer(j);
+			    }
+				timerLabel.setText("         ");
+			}
+		    else{
+		    	caller_id_label.setText("");
+		    }
+		    int i = 0;
+		    while (incoming_call) {
+		    	try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-			    this.updateGUI();
+		    	if (incoming_call) {
+		    		System.out.println(caller_id + "'s phone is ringing ... Ring #" + (i+1));
+		    	}
+				i++;
+			}
+		    this.updateGUI();
 	    }
+    }
 		
-	}
+	
 	
 	
 	public void call(Phone phone, String message) {
-		System.out.println("in call");
 	    this.outgoing_call = true;
-	    this.connectedPhone = phone;
-	    phone.connectedPhone = this;
-		this.current_caller_id = phone.caller_id;
+	    this.setConnectedPhone(phone);
+	    phone.setConnectedPhone(this);
 		phone.incoming_call = true;
 		phone.incoming_message = message;
-		phone.current_caller_id = this.caller_id;
-		
+		System.out.println("incoming call is " + phone.incoming_call);
 	}
 	
 	public void end_call() {
@@ -162,15 +162,18 @@ public abstract class Phone implements Runnable{
 		if(ongoing_call == true){
 			call_ended = true;
 		}
-		ongoing_call = false;
-		outgoing_call = false;
-		if (connectedPhone != null) {
-			connectedPhone.incoming_call = false;
-			connectedPhone.ongoing_call = false;
+		this.ongoing_call = false;
+		this.outgoing_call = false;
+		if (this.getConnectedPhone() != null) {
+			this.getConnectedPhone().incoming_call = false;
+			this.getConnectedPhone().ongoing_call = false;
+			this.getConnectedPhone().setConnectedPhone(null);
+			this.setConnectedPhone(null);
 		}
 		if(call_ended){
 			System.out.println("Call ended");
 		}
+	
 	}
 	
 	public void answer() {
@@ -178,17 +181,29 @@ public abstract class Phone implements Runnable{
 			incoming_call = false;
 			ongoing_call = true;
 			System.out.println("Client answered");
-			this.connectedPhone.ongoing_call = true;
+			this.getConnectedPhone().ongoing_call = true;
 		}
 	}
 	
+	private Phone getConnectedPhone(){
+		synchronized(this){
+			return this.connectedPhone;
+		}
+	}
+	
+	private void setConnectedPhone(Phone phone){
+		synchronized(this){
+			this.connectedPhone = phone;
+		}
+	}
 	private void maintainTimer(int i){
 		
 		if (ongoing_call) {
 			String time = getTimeInMMSS(i);
+			
 	        this.timerLabel.setText(time);
 	        if(this instanceof ClientPhone){
-	        	System.out.println(caller_id + " in call with " + current_caller_id + " for " + i + " second(s)");
+	        	System.out.println(caller_id + " in call with " + this.getConnectedPhone().caller_id + " for " + i + " second(s)");
 	        }
 		}
 		else{
