@@ -1,7 +1,10 @@
 import java.awt.Button;
 import java.awt.FlowLayout;
 import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.Label;
 import java.awt.Panel;
 import java.awt.Window;
@@ -44,10 +47,11 @@ public abstract class Phone implements Runnable{
 	public abstract Object createLayout();
 	
 	public void createFrame() {
-		Label timerLabel = new Label("           ");
+		Label timerLabel = new Label("00:00");
+		Label callDurationLabel = new Label("Call Duration:");
 		this.timerLabel = timerLabel;
-		Label caller_id_label = new Label("");
-		
+		Label caller_id_label = new Label(caller_id);
+		Label callerIDLabel = new Label("Caller ID:");
 		// generate the GUI
 		Frame  interfaceFrame = new Frame(caller_id);
 	    Button answer_button = new Button("Answer");
@@ -77,19 +81,48 @@ public abstract class Phone implements Runnable{
 	    // update rows parameter for the number of rows.
 	    Object layout = createLayout();
 	    if(this instanceof ClientPhone){
-	    	interfaceFrame.setLayout((GridLayout)layout);
+	    	interfaceFrame.setLayout((GridBagLayout)layout);
 	    }
 	    else{
-	    	interfaceFrame.setLayout((FlowLayout)layout);
+	    	interfaceFrame.setLayout((GridBagLayout)layout);
 	    }
 	    
 
 	    // Add to frame
-	    Panel panel = new Panel();
-	    panel.add(timerLabel);
-	    panel.add(caller_id_label);
-	    panel.add(answer_button);
-	    panel.add(end_button);
+	    Panel panel = new Panel(new GridBagLayout());
+	    GridBagConstraints constraints = new GridBagConstraints();
+	    constraints.fill = GridBagConstraints.NONE;
+	    constraints.gridx = 1;
+	    constraints.gridy = 1;
+	    panel.add(timerLabel, constraints);
+	    
+	    constraints.fill = GridBagConstraints.NONE;
+	    constraints.gridx = 0;
+	    constraints.gridy = 1;
+	    panel.add(callDurationLabel, constraints);
+	    
+	    constraints.fill = GridBagConstraints.NONE;
+	    constraints.gridx = 0;
+	    constraints.gridy = 2;
+	    panel.add(callerIDLabel, constraints);
+	    
+	    constraints.fill = GridBagConstraints.NONE;
+	    constraints.gridx = 1;
+	    constraints.gridy = 2;
+	    panel.add(caller_id_label, constraints);
+	    
+	    constraints.fill = GridBagConstraints.NONE;
+	    constraints.gridx = 0;
+	    constraints.gridy = 5;
+	    constraints.insets = new Insets(5,5,5,5);
+	    panel.add(answer_button, constraints);
+	    
+	    constraints.fill = GridBagConstraints.NONE;
+	    constraints.gridx = 1;
+	    constraints.gridy = 5;
+	    constraints.insets = new Insets(5,5,5,5);
+	    panel.add(end_button, constraints);
+	    
 	    interfaceFrame.add(panel);
 	    this.frame = interfaceFrame;
 	    this.addToFrame();
@@ -122,7 +155,7 @@ public abstract class Phone implements Runnable{
 					j++;
 					this.maintainTimer(j);
 			    }
-				timerLabel.setText("         ");
+				timerLabel.setText("00:00");
 			}
 		    else{
 		    	caller_id_label.setText("");
