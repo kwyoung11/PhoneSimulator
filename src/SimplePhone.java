@@ -35,7 +35,7 @@ public class SimplePhone extends Phone{
 
 	@Override
 	public void addToFrame() {
-		Button callButton = new Button("Call");
+		Button callButton = new Button("Call Client");
 		JTextField numberTextBox = new JTextField(8);
 		JTextField timeTextBox = new JTextField(4);
 		
@@ -47,37 +47,34 @@ public class SimplePhone extends Phone{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				ClientPhone client = Network.getInstance().getClientPhone();
-				SimplePhone.this.call(client, "My message");
-				
+				SimplePhone.this.call(client, "My message");				
 			}
 		});
 		
 		Panel panel = new Panel(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
 	    
-	    constraints.fill = GridBagConstraints.HORIZONTAL;
-	    constraints.gridx = 1;
-	    constraints.gridy = 1;
+//	    constraints.fill = GridBagConstraints.HORIZONTAL;
+//	    constraints.gridx = 1;
+//	    constraints.gridy = 1;
+//	    panel.add(numberLabel,constraints);
+//	    
+//	    constraints.gridx = 2;
+//	    constraints.gridy = 1;
+//	    panel.add(numberTextBox, constraints);
 	    
-	    panel.add(numberLabel,constraints);
-	    
-	    constraints.gridx = 2;
-	    constraints.gridy = 1;
-	    panel.add(numberTextBox, constraints);
-	    
-	    constraints.fill = GridBagConstraints.HORIZONTAL;
-	    constraints.gridx = 1;
-	    constraints.gridy = 2;
-	    
-	    panel.add(timeLabel,constraints);
-	    
-	    constraints.gridx = 2;
-	    constraints.gridy = 2;
-	    panel.add(timeTextBox, constraints);
+//	    constraints.fill = GridBagConstraints.HORIZONTAL;
+//	    constraints.gridx = 1;
+//	    constraints.gridy = 2;
+//	    panel.add(timeLabel,constraints);
+//	    
+//	    constraints.gridx = 2;
+//	    constraints.gridy = 2;
+//	    panel.add(timeTextBox, constraints);
 
 	    constraints.gridx = 2;
 	    constraints.gridy = 3;
-	    constraints.insets = new Insets(5,5,5,5);
+	    constraints.insets = new Insets(50,5,5,5);
 		panel.add(callButton, constraints);
 		
 
@@ -100,7 +97,6 @@ public class SimplePhone extends Phone{
 
 	@Override
 	public void updateGUI() {
-		// TODO Auto-generated method stub
 		
 	}
 

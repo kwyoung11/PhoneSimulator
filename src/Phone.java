@@ -47,11 +47,12 @@ public abstract class Phone implements Runnable{
 	public abstract Object createLayout();
 	
 	public void createFrame() {
-		Label timerLabel = new Label("00:00");
-		Label callDurationLabel = new Label("Call Duration:");
+		Label timerLabel = new Label("         ");
+		Label callDurationLabel = new Label("                       ");
 		this.timerLabel = timerLabel;
-		Label caller_id_label = new Label(caller_id);
-		Label callerIDLabel = new Label("Caller ID:");
+		Label caller_id_label = new Label("                          ");
+		Label callerIDLabel = new Label("                                 ");
+		
 		// generate the GUI
 		Frame  interfaceFrame = new Frame(caller_id);
 	    Button answer_button = new Button("Answer");
@@ -80,14 +81,13 @@ public abstract class Phone implements Runnable{
 	    // Set layout manager
 	    // update rows parameter for the number of rows.
 	    Object layout = createLayout();
-	    if(this instanceof ClientPhone){
+	    if (this instanceof ClientPhone) {
 	    	interfaceFrame.setLayout((GridBagLayout)layout);
 	    }
-	    else{
+	    else {
 	    	interfaceFrame.setLayout((GridBagLayout)layout);
 	    }
 	    
-
 	    // Add to frame
 	    Panel panel = new Panel(new GridBagLayout());
 	    GridBagConstraints constraints = new GridBagConstraints();
@@ -104,11 +104,13 @@ public abstract class Phone implements Runnable{
 	    constraints.fill = GridBagConstraints.NONE;
 	    constraints.gridx = 0;
 	    constraints.gridy = 2;
+	    constraints.insets = new Insets(5,5,5,5);
 	    panel.add(callerIDLabel, constraints);
 	    
 	    constraints.fill = GridBagConstraints.NONE;
 	    constraints.gridx = 1;
 	    constraints.gridy = 2;
+	    constraints.anchor = GridBagConstraints.CENTER;
 	    panel.add(caller_id_label, constraints);
 	    
 	    constraints.fill = GridBagConstraints.NONE;
@@ -127,12 +129,6 @@ public abstract class Phone implements Runnable{
 	    this.frame = interfaceFrame;
 	    this.addToFrame();
 	    interfaceFrame.pack();
-
-	    
-	   
-	    // Set X,Y location
-	   
-
 	    
 	    interfaceFrame.setVisible(true);
 	    this.centerFrame();
@@ -140,12 +136,45 @@ public abstract class Phone implements Runnable{
 	    System.out.println("done creating GUI");
 	   
 	    
-	    while(true) {
+	    while (true) {
+	    	try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	    	Phone connectedPhone = this.getConnectedPhone();
 		    if (connectedPhone != null) {
-				 caller_id_label.setText(this.getConnectedPhone().caller_id);
+				 caller_id_label.setText(caller_id);
 				 int j = 0;
+				 
+				 synchronized (this) {
+			    	  
+					    if (this instanceof ClientPhone) { // if ClientPhone
+					    	if (incoming_call) {
+					    		callerIDLabel.setText("Incoming ...");
+					    	} else if (ongoing_call) {
+					    		callDurationLabel.setText("Call Duration: ");
+					    		callerIDLabel.setText("Connected to...");
+					    	} else {
+					    		callerIDLabel.setText("                          ");
+					    	}
+					    } else { // else if SimplePhone
+					    	if (outgoing_call) {
+							    callerIDLabel.setText("Calling...");
+							} else if (ongoing_call) {
+								callDurationLabel.setText("Call Duration: ");
+								callerIDLabel.setText("Connected to ...");
+							} else {
+								callerIDLabel.setText("                          ");
+							}
+					   }
+			    }
+				 
+				 
 				while (ongoing_call) {
+					callerIDLabel.setText("Connected to ...");
+					callDurationLabel.setText("Call Duration: ");
 					try {
 						Thread.sleep(1000);
 					} catch (InterruptedException e) {
@@ -155,13 +184,20 @@ public abstract class Phone implements Runnable{
 					j++;
 					this.maintainTimer(j);
 			    }
-				timerLabel.setText("00:00");
-			}
-		    else{
+				timerLabel.setText("     ");
+			} else {
+		    	callDurationLabel.setText("                      ");
+				callerIDLabel.setText("                           ");
 		    	caller_id_label.setText("");
+		    	
 		    }
 		    int i = 0;
 		    while (incoming_call) {
+		    	 if (this instanceof ClientPhone) { // if ClientPhone
+		    		 callerIDLabel.setText("Incoming call ...");
+		    	 } else {
+		    		 callerIDLabel.setText("Calling ...");
+		    	 }
 		    	try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
@@ -174,13 +210,16 @@ public abstract class Phone implements Runnable{
 				i++;
 			}
 		    this.updateGUI();
+		    
+		  
+		       
 	    }
     }
 		
 	
 	
 	
-	public void call(Phone phone, String message) {
+	public synchronized void call(Phone phone, String message) {
 	    this.outgoing_call = true;
 	    this.setConnectedPhone(phone);
 	    phone.setConnectedPhone(this);
@@ -189,7 +228,7 @@ public abstract class Phone implements Runnable{
 		System.out.println("incoming call is " + phone.incoming_call);
 	}
 	
-	public void end_call() {
+	public synchronized void end_call() {
 		this.incoming_call = false;
 		boolean call_ended = false;
 		if(ongoing_call == true){
@@ -209,7 +248,7 @@ public abstract class Phone implements Runnable{
 	
 	}
 	
-	public void answer() {
+	public synchronized void answer() {
 		if (incoming_call) {
 			incoming_call = false;
 			ongoing_call = true;
@@ -229,17 +268,16 @@ public abstract class Phone implements Runnable{
 			this.connectedPhone = phone;
 		}
 	}
-	private void maintainTimer(int i){
-		
+	private void maintainTimer(int i) {
+
 		if (ongoing_call) {
-			String time = getTimeInMMSS(i);
 			
+			String time = getTimeInMMSS(i);
 	        this.timerLabel.setText(time);
 	        if(this instanceof ClientPhone){
 	        	System.out.println(caller_id + " in call with " + this.getConnectedPhone().caller_id + " for " + i + " second(s)");
 	        }
-		}
-		else{
+		} else {
 			this.timerLabel.setText("        ");
 		}
 	}
