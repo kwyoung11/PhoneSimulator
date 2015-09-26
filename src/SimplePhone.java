@@ -2,13 +2,19 @@ import java.awt.Button;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.Label;
 import java.awt.Panel;
+import java.awt.TextArea;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+
+import javax.swing.JTextField;
 
 
 public class SimplePhone extends Phone{
@@ -29,17 +35,52 @@ public class SimplePhone extends Phone{
 
 	@Override
 	public void addToFrame() {
-		Button callButton = new Button("call");
+		Button callButton = new Button("Call Client");
+		JTextField numberTextBox = new JTextField(8);
+		JTextField timeTextBox = new JTextField(4);
+		
+		Label numberLabel = new Label("Number");
+		Label timeLabel = new Label("Time");
+		
 		callButton.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				ClientPhone client = Network.getInstance().getClientPhone();
-				SimplePhone.this.call(client, "My message");
-				
+				SimplePhone.this.call(client, "My message");				
 			}
 		});
-		frame.add(callButton);
+		
+		Panel panel = new Panel(new GridBagLayout());
+		GridBagConstraints constraints = new GridBagConstraints();
+	    
+//	    constraints.fill = GridBagConstraints.HORIZONTAL;
+//	    constraints.gridx = 1;
+//	    constraints.gridy = 1;
+//	    panel.add(numberLabel,constraints);
+//	    
+//	    constraints.gridx = 2;
+//	    constraints.gridy = 1;
+//	    panel.add(numberTextBox, constraints);
+	    
+//	    constraints.fill = GridBagConstraints.HORIZONTAL;
+//	    constraints.gridx = 1;
+//	    constraints.gridy = 2;
+//	    panel.add(timeLabel,constraints);
+//	    
+//	    constraints.gridx = 2;
+//	    constraints.gridy = 2;
+//	    panel.add(timeTextBox, constraints);
+
+	    constraints.gridx = 2;
+	    constraints.gridy = 3;
+	    constraints.insets = new Insets(50,5,5,5);
+		panel.add(callButton, constraints);
+		
+
+	    frame.add(panel);
+	    
+
 	}
 	
 	@Override
@@ -56,13 +97,12 @@ public class SimplePhone extends Phone{
 
 	@Override
 	public void updateGUI() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public Object createLayout() {
-		return new FlowLayout();
+		return new GridBagLayout();
 	}
 	
 	
