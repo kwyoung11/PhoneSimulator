@@ -133,9 +133,6 @@ public abstract class Phone implements Runnable{
 	    interfaceFrame.setVisible(true);
 	    this.centerFrame();
 	    
-	    System.out.println("done creating GUI");
-	   
-	    
 	    while (true) {
 	    	try {
 				Thread.sleep(500);
@@ -145,7 +142,7 @@ public abstract class Phone implements Runnable{
 			}
 	    	Phone connectedPhone = this.getConnectedPhone();
 		    if (connectedPhone != null) {
-				 caller_id_label.setText(caller_id);
+				 caller_id_label.setText(this.connectedPhone.caller_id);
 				 int j = 0;
 				 
 				 synchronized (this) {
